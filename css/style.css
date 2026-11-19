@@ -1,0 +1,453 @@
+/*
+ * A forma da página conta a história.
+ * Cada "estágio" é uma fase da doença, e a página da Bia muda junto:
+ *   1  página caprichada, cheia de seções (dias 1–2)
+ *   2  a mesma página, mas cansada, escrita de madrugada (dia 3)
+ *   3  letra maior, menos coisa (dia 4)
+ *   4  frases soltas, fonte para baixa visão (dias 5–6)
+ *   5  quase só letreiro (dia 7)
+ *   6  depois (dia 8): a letra volta ao normal, porque não é mais pra ela
+ */
+
+:root {
+  --bg: #f5efe4;
+  --paper: #fffaf1;
+  --ink: #2c2925;
+  --muted: #80766a;
+  --accent: #b5543c;
+  --line: #e4d9c6;
+  --pen: #2b3f6b;
+  --font: "Lora", Georgia, serif;
+  --size: 19px;
+  --measure: 38rem;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: var(--size);
+  line-height: 1.62;
+  transition: background-color 1.2s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+#topo, #pagina, #rodape {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 24px;
+  transition: filter 2.4s ease, opacity 2.4s ease;
+}
+body.acordando #topo, body.acordando #pagina, body.acordando #rodape {
+  filter: blur(9px);
+  opacity: 0.15;
+  transition: none;
+}
+
+/* ─────────── cabeçalho ─────────── */
+#topo { padding-top: 34px; padding-bottom: 8px; }
+.marca {
+  font-family: "Caveat", cursive;
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--accent);
+  line-height: 1;
+}
+.meta {
+  margin-top: 8px;
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+  display: flex; flex-wrap: wrap; gap: 0 8px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+/* ─────────── texto ─────────── */
+#pagina { padding-top: 18px; padding-bottom: 30px; }
+h1 {
+  font-weight: 600;
+  font-size: 2.15em;
+  line-height: 1.15;
+  margin: 0.6em 0 0.4em;
+  letter-spacing: -0.01em;
+}
+h2 {
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  margin: 2.6em 0 0.9em;
+  display: flex; align-items: center; gap: 12px;
+}
+h2::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+p { margin: 0 0 1em; }
+strong { font-weight: 600; }
+del {
+  color: var(--muted);
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  opacity: 0.75;
+}
+.aside { font-style: italic; color: var(--muted); font-size: 0.9em; }
+.eco-p { }
+.eco {
+  font-family: "Caveat", cursive;
+  font-size: 1.35em;
+  color: var(--pen);
+  line-height: 1.2;
+}
+.dica {
+  margin-top: 3em;
+  padding-top: 1.2em;
+  border-top: 1px dashed var(--line);
+  font-style: italic;
+  color: var(--muted);
+  font-size: 0.9em;
+}
+
+.lista { list-style: none; padding: 0; margin: 0 0 1em; }
+.lista li { position: relative; padding-left: 1.3em; margin-bottom: 0.45em; }
+.lista li::before {
+  content: ""; position: absolute; left: 0.2em; top: 0.68em;
+  width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+}
+
+/* ─────────── palavras esquecidas ─────────── */
+.f {
+  filter: blur(3.6px);
+  opacity: 0.6;
+  cursor: help;
+  border-radius: 3px;
+  transition: filter 3.5s ease, opacity 3.5s ease;
+  outline: none;
+  -webkit-user-select: none; user-select: none;
+  -webkit-touch-callout: none;
+  position: relative;
+}
+.f.lembrando { filter: blur(0); opacity: 1; transition: filter 1.4s ease-out, opacity 1.4s ease-out; }
+.f.lembrou { filter: blur(0); opacity: 1; }
+.f.lost { filter: blur(5px); opacity: 0.45; }
+.f.lost.forca { animation: forca 0.5s ease-in-out 3; filter: blur(3.4px); transition: filter 0.6s; }
+@keyframes forca {
+  0%, 100% { transform: translateX(0); }
+  30% { transform: translateX(-1.5px); }
+  70% { transform: translateX(1.5px); }
+}
+.f-wrap { position: relative; display: inline; }
+.dica-flutuante {
+  content: "segure para lembrar";
+  position: absolute; left: 50%; top: 150%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: var(--font);
+  font-style: italic;
+  font-size: 12px;
+  color: var(--paper);
+  background: var(--ink);
+  padding: 3px 9px;
+  border-radius: 20px;
+  filter: none;
+  pointer-events: none;
+  animation: dica 2.6s ease-in-out infinite;
+}
+@keyframes dica { 0%,100% { opacity: .85; } 50% { opacity: .45; } }
+
+/* ─────────── cartões ─────────── */
+.cartoes { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 0 0 1em; }
+.cartao {
+  background: var(--paper);
+  border-radius: 6px;
+  padding: 16px 16px 14px;
+  box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 6px 18px -10px rgba(60,40,20,.35);
+  display: flex; gap: 14px; align-items: flex-start;
+  font-size: 0.86em; line-height: 1.5;
+}
+.stage-1 .cartao:nth-child(odd) { transform: rotate(-0.6deg); }
+.stage-1 .cartao:nth-child(even) { transform: rotate(0.5deg); }
+.avatar {
+  flex: 0 0 46px; height: 46px; border-radius: 50%;
+  background: var(--cor);
+  color: #fff;
+  font-family: "Caveat", cursive; font-weight: 600; font-size: 28px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: inset 0 -3px 0 rgba(0,0,0,.12);
+}
+.cartao-nome { font-weight: 600; font-size: 1.12em; margin-bottom: 2px; }
+
+/* ─────────── a valsa ─────────── */
+.musica {
+  display: flex; align-items: center; gap: 18px;
+  background: var(--paper);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin: 1.2em 0 1.4em;
+  box-shadow: 0 6px 18px -12px rgba(60,40,20,.45);
+}
+.tocar {
+  flex: 0 0 54px; height: 54px; border-radius: 50%;
+  border: 0; cursor: pointer;
+  background: var(--accent); color: #fff;
+  font-size: 18px;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .2s ease, background .3s;
+}
+.tocar:hover { transform: scale(1.06); }
+.tocar:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.tocar .ic { transform: translateX(1px); }
+.mus-info { flex: 1; min-width: 0; }
+.mus-nome { font-style: italic; font-size: 0.95em; margin-bottom: 8px; }
+.compassos { display: flex; gap: 12px; flex-wrap: wrap; }
+.frase { display: flex; gap: 5px; }
+.compassos i {
+  width: 11px; height: 11px; border-radius: 50%;
+  display: block;
+  transition: transform .25s ease, background .3s, opacity .3s;
+}
+.compassos i.sei { background: var(--accent); opacity: .55; }
+.compassos i.nao { border: 1.5px dashed var(--muted); opacity: .45; }
+.compassos i.foi { opacity: 1; }
+.compassos i.agora { opacity: 1; transform: scale(1.55); box-shadow: 0 0 0 4px rgba(181,84,60,.18); }
+.compassos i.procura { animation: procura 0.7s ease-in-out 3; }
+@keyframes procura { 50% { transform: scale(1.5); opacity: .9; } }
+.mus-legenda { font-size: 12px; color: var(--muted); margin-top: 7px; letter-spacing: .03em; }
+
+/* ─────────── caderno ─────────── */
+.caderno { position: relative; margin: 0 0 1em; }
+.caderno textarea {
+  width: 100%;
+  border: 0; resize: vertical;
+  border-radius: 4px;
+  padding: 6px 18px 10px 44px;
+  font-family: "Caveat", cursive;
+  font-size: 26px;
+  line-height: 36px;
+  color: var(--pen);
+  background-color: #fffdf7;
+  background-image:
+    linear-gradient(90deg, transparent 32px, rgba(200,80,80,.35) 32px, rgba(200,80,80,.35) 33px, transparent 33px),
+    repeating-linear-gradient(transparent 0 35px, #cfd8e6 35px 36px);
+  background-attachment: local;
+  box-shadow: 0 6px 18px -12px rgba(60,40,20,.45);
+  min-height: 190px;
+  outline: none;
+}
+.caderno textarea:focus { box-shadow: 0 0 0 2px var(--line), 0 6px 18px -12px rgba(60,40,20,.45); }
+.caderno textarea::placeholder { color: #9aa6bd; }
+.caderno-status { position: absolute; right: 12px; bottom: 10px; font-size: 12px; color: var(--muted); font-style: italic; }
+
+/* ─────────── texto pra ela / texto da Bia ─────────── */
+.grande .linha {
+  margin: 0 0 0.35em;
+  animation: surge 1s ease both;
+  animation-delay: calc(var(--i) * 0.45s + 1.6s);
+}
+@keyframes surge { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.pequeno {
+  font-family: "Lora", Georgia, serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted);
+  font-style: italic;
+  margin: 1.4em 0;
+}
+.pequeno p { margin-bottom: .9em; }
+.pequeno.longe { margin-top: 70vh; padding-top: 1.5em; border-top: 1px solid var(--line); }
+
+/* ─────────── a carta da Lúcia ─────────── */
+.carta {
+  font-family: "Caveat", cursive;
+  font-size: 27px;
+  line-height: 1.32;
+  color: #45464a;
+  background-color: #fdfcf6;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='120'%3E%3Cg stroke='%23d9d4c4' stroke-width='1'%3E%3Cpath d='M0 30.5h10M0 40.5h10M0 50.5h10M0 60.5h10M0 70.5h10'/%3E%3C/g%3E%3C/svg%3E");
+  padding: 34px 30px 26px;
+  margin: 1.6em -6px 1.4em;
+  border-radius: 3px;
+  transform: rotate(-0.5deg);
+  box-shadow: 0 1px 0 rgba(0,0,0,.05), 0 14px 30px -18px rgba(40,30,20,.6);
+  text-transform: none;
+}
+.carta p { margin: 0 0 .75em; }
+.carta del { color: inherit; opacity: .6; text-decoration-color: #45464a; text-decoration-thickness: 1.5px; }
+.carta .eco { font-size: 1em; color: #2b3f6b; }
+.carta .assinatura { text-align: right; font-size: 1.3em; margin-top: .6em; }
+
+/* ─────────── rodapé / dormir ─────────── */
+#rodape { padding-bottom: 90px; text-align: center; }
+.dormir {
+  font-family: "Lora", Georgia, serif;
+  font-size: 18px;
+  letter-spacing: .04em;
+  border: 0; cursor: pointer;
+  background: var(--ink); color: var(--bg);
+  padding: 14px 40px;
+  border-radius: 40px;
+  margin-top: 30px;
+  transition: transform .2s ease, opacity .2s;
+}
+.dormir::before { content: "☾  "; }
+.dormir:hover { transform: translateY(-2px); }
+.dormir:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+/* ─────────── a noite ─────────── */
+#noite {
+  position: fixed; inset: 0;
+  background: #0d111c;
+  color: #c9c3b6;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 24px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 1.6s ease;
+  z-index: 10;
+}
+#noite.on { opacity: 1; pointer-events: auto; }
+#noite p { margin: 0; position: absolute; transition: opacity 1s ease; }
+#noite .n1 { font-family: "Lora", Georgia, serif; font-style: italic; font-size: 17px; opacity: .85; }
+#noite .n2 { font-family: "Caveat", cursive; font-size: 40px; color: #e8dcc4; opacity: 0; }
+#noite.fase2 .n1 { opacity: 0; }
+#noite.fase2 .n2 { opacity: 1; }
+.cursor { animation: pisca 1s steps(1) infinite; margin-left: 2px; }
+@keyframes pisca { 50% { opacity: 0; } }
+
+/* ═════════════ ESTÁGIOS ═════════════ */
+
+/* 2: madrugada. A mesma página, um pouco desarrumada. */
+.stage-2 { --bg: #efe9de; --size: 19.5px; }
+.stage-2 .meta span:last-child { color: var(--accent); }
+.stage-2 h2 { letter-spacing: .12em; }
+.stage-2 .cartao:nth-child(3) { transform: rotate(-1deg) translateX(4px); }
+
+/* 3: letra maior, menos coisa */
+.stage-3 {
+  --bg: #faf6ee; --ink: #1f1d1a;
+  --font: "Atkinson", Verdana, sans-serif;
+  --size: 23px; --measure: 40rem;
+}
+.stage-3 h1 { font-weight: 700; font-size: 1.75em; }
+.stage-3 .cartao { font-size: .8em; }
+.stage-3 .pequeno:first-child { margin-top: 0; }
+
+/* 4: frases soltas */
+.stage-4 {
+  --bg: #fffdf8; --ink: #121110; --paper: #f7f2e8;
+  --font: "Atkinson", Verdana, sans-serif;
+  --size: 22px; --measure: 46rem;
+}
+.stage-4 .grande { margin: 1.4em 0 1.6em; }
+.stage-4 .grande .linha { font-weight: 700; font-size: clamp(30px, 6.4vw, 54px); line-height: 1.12; }
+.stage-4 .musica, .stage-5 .musica { padding: 22px 26px; }
+.stage-4 .tocar, .stage-5 .tocar { flex-basis: 72px; height: 72px; font-size: 24px; }
+.stage-4 .meta, .stage-5 .meta { border-bottom-color: #ece6da; }
+
+/* 5: letreiro */
+.stage-5 {
+  --bg: #ffffff; --ink: #0b0b0b; --paper: #f4f1ea;
+  --font: "Atkinson", Verdana, sans-serif;
+  --size: 22px; --measure: 54rem;
+}
+.stage-5 .grande .linha {
+  font-weight: 700; text-transform: uppercase;
+  font-size: clamp(34px, 8.2vw, 80px); line-height: 1.04; letter-spacing: .01em;
+  margin-bottom: .3em;
+}
+.stage-5 .marca { opacity: .5; }
+
+/* 6: depois. A letra volta ao tamanho normal. Não é mais pra ela. */
+.stage-6 {
+  --bg: #f4f3f0; --ink: #34322f; --muted: #8b877f; --accent: #8b877f; --line: #e2dfd8;
+  --font: "Lora", Georgia, serif; --size: 18px; --measure: 34rem;
+}
+.stage-6 .marca { color: var(--muted); font-weight: 400; }
+.stage-6 .marca { text-decoration: line-through; text-decoration-thickness: 1.5px; text-decoration-color: rgba(0,0,0,.25); }
+.stage-6 #pagina { padding-top: 40px; }
+.stage-6 #pagina > p { animation: surge 1.4s ease both; }
+.stage-6 #pagina > p:nth-child(2) { animation-delay: .8s; }
+.stage-6 #pagina > p:nth-child(3) { animation-delay: 1.6s; }
+.stage-6 #pagina > p:nth-child(4) { animation-delay: 2.4s; }
+.stage-6 #pagina > p:nth-child(5) { animation-delay: 3.2s; }
+.stage-6 #pagina > p:nth-child(6) { animation-delay: 4.0s; }
+.stage-6 #pagina > p:nth-child(5) { font-weight: 600; }
+
+.ultima { margin-top: 3em; animation: surge 1.4s ease 5s both; }
+.pergunta {
+  display: block;
+  font-style: italic;
+  font-size: 1.7em;
+  line-height: 1.2;
+  margin-bottom: .7em;
+  color: var(--ink);
+}
+.ultima textarea {
+  width: 100%;
+  font-family: "Lora", Georgia, serif;
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 14px 16px;
+  resize: vertical;
+  outline: none;
+}
+.ultima textarea:focus { border-color: #b9b4aa; }
+.guardar {
+  margin-top: 14px;
+  font-family: "Lora", Georgia, serif; font-size: 17px;
+  background: var(--ink); color: #fff;
+  border: 0; border-radius: 30px; padding: 12px 34px; cursor: pointer;
+}
+
+/* epitáfio */
+.epitafio #pagina { padding-top: 12vh; text-align: center; }
+.lapide { opacity: 0; transition: opacity 3s ease; }
+.mostrar .lapide { opacity: 1; }
+.lapide blockquote {
+  margin: 0 auto .9em;
+  font-size: clamp(24px, 4.6vw, 34px);
+  line-height: 1.35;
+  color: var(--ink);
+  max-width: 30rem;
+  overflow-wrap: anywhere;
+}
+.lapide blockquote.vazio { font-style: italic; color: var(--muted); }
+.lapide .assin { font-size: 14px; letter-spacing: .08em; color: var(--muted); font-style: italic; }
+.lapide .tempo { font-size: 15px; color: var(--muted); margin-top: 2.2em; }
+.mus-final { max-width: 26rem; margin: 2.4em auto 0; text-align: left; background: #fff; opacity: 0; transition: opacity 3s ease 1.2s; }
+.mostrar .mus-final { opacity: 1; }
+.mus-final .tocar { background: #5d5a55; }
+.mus-final .compassos i.sei { background: #5d5a55; }
+.mus-final .compassos i.agora { box-shadow: 0 0 0 4px rgba(93,90,85,.18); }
+.fim { margin-top: 3.2em; font-style: italic; color: var(--muted); opacity: 0; transition: opacity 4s ease; }
+.fim.visivel { opacity: 1; }
+.recomecar { margin-top: 28vh; font-size: 12px; }
+.recomecar a { color: #c4c0b8; text-decoration: none; }
+.recomecar a:hover { color: var(--muted); }
+
+/* ─────────── telas pequenas ─────────── */
+@media (max-width: 620px) {
+  :root { --size: 17.5px; }
+  #topo, #pagina, #rodape { padding-left: 20px; padding-right: 20px; }
+  .cartoes { grid-template-columns: 1fr; }
+  h1 { font-size: 1.95em; }
+  .stage-3 { --size: 20px; }
+  .stage-4, .stage-5 { --size: 19px; }
+  .carta { font-size: 24px; padding: 26px 20px 20px; margin-left: -4px; margin-right: -4px; }
+  .musica { gap: 14px; padding: 14px 16px; }
+  .compassos { gap: 8px; }
+  .frase { gap: 4px; }
+  .compassos i { width: 9px; height: 9px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .3s !important; }
+}
